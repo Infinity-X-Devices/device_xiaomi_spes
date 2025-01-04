@@ -7,8 +7,8 @@ END="\033[0m"
 
 # Define branches
 VENDOR_BRANCH="15.0"
-KERNEL_BRANCH="NaughtySilver"
-HARDWARE_BRANCH="lineage-22.0"
+KERNEL_BRANCH="main"
+HARDWARE_BRANCH="lineage-22.1"
 
 # Function to check if a directory exists
 check_and_clone() {
@@ -41,8 +41,8 @@ else
 fi
 
 # Clone required repositories if not already present
-check_and_clone "vendor/xiaomi/spes" "https://github.com/spes-development/vendor_xiaomi_spes" "$VENDOR_BRANCH"
-check_and_clone "kernel/xiaomi/sm6225" "https://github.com/spes-development/kernel_xiaomi_sm6225" "$KERNEL_BRANCH"
+check_and_clone "vendor/xiaomi/spes" "https://github.com/sayann70/vendor_xiaomi_spes" "$VENDOR_BRANCH"
+check_and_clone "kernel/xiaomi/sm6225" "https://github.com/muralivijay/kernel_xiaomi_sm6225" "$KERNEL_BRANCH"
 check_and_clone "hardware/xiaomi" "https://github.com/LineageOS/android_hardware_xiaomi" "$HARDWARE_BRANCH"
 
 echo -e "${YELLOW}All patches applied successfully. Device sources are ready!${END}"

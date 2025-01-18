@@ -1,48 +1,28 @@
-#!/bin/bash
+# ROM source patches
 
-# Define color codes
-GREEN="\033[0;32m"
-YELLOW="\033[1;33m"
-END="\033[0m"
+color="\033[0;32m"
+end="\033[0m"
 
-# Define branches
-VENDOR_BRANCH="15.0"
-KERNEL_BRANCH="main"
-HARDWARE_BRANCH="lineage-22.1"
+echo -e "${color}Applying patches${end}"
+sleep 1
 
-# Function to check if a directory exists
-check_and_clone() {
-    local dir=$1
-    local repo=$2
-    local branch=$3
-    if [ -d "$dir" ]; then
-        echo -e "${YELLOW}• $dir already exists. Skipping cloning...${END}"
-    else
-        echo -e "${GREEN}Cloning $dir from $repo (branch: ${YELLOW}$branch${GREEN})...${END}"
-        git clone --depth=1 -b "$branch" "$repo" "$dir"
-    fi
-}
-
-# Apply patches and check for conflicting files
-echo -e "${YELLOW}Applying patches and cloning device sources...${END}"
-
-# Remove conflicting files
-echo -e "${GREEN}• Removing conflicting files...${END}"
+# Remove pixel headers to avoid conflicts
 rm -rf hardware/google/pixel/kernel_headers/Android.bp
-rm -rf hardware/lineage/compat/Android.bp
 
-# Handle legacy imsrcsd sepolicy
-SEPOLICY_PATH="device/qcom/sepolicy_vndr/legacy-um/qva/vendor/bengal/legacy-ims/hal_rcsservice.te"
-if [ -f "$SEPOLICY_PATH" ]; then
-    echo -e "${GREEN}Switching to legacy imsrcsd sepolicy...${END}"
-    cp "$SEPOLICY_PATH" device/qcom/sepolicy_vndr/legacy-um/qva/vendor/bengal/ims/hal_rcsservice.te
-else
-    echo -e "${YELLOW}• Missing legacy imsrcsd sepolicy file. Skipping...${END}"
-fi
+# Kernel & Vendor Sources
+git clone https://github.com/sayann70/vendor_xiaomi_spes -b 15 vendor/xiaomi/spes
+git clone https://github.com/muralivijay/kernel_xiaomi_sm6225 kernel/xiaomi/sm6225
 
-# Clone required repositories if not already present
-check_and_clone "vendor/xiaomi/spes" "https://github.com/sayann70/vendor_xiaomi_spes" "$VENDOR_BRANCH"
-check_and_clone "kernel/xiaomi/sm6225" "https://github.com/muralivijay/kernel_xiaomi_sm6225" "$KERNEL_BRANCH"
-check_and_clone "hardware/xiaomi" "https://github.com/LineageOS/android_hardware_xiaomi" "$HARDWARE_BRANCH"
+# Hardware/Xiaomi
+git clone https://github.com/spes-development/hardware_xiaomi hardware/xiaomi
 
-echo -e "${YELLOW}All patches applied successfully. Device sources are ready!${END}"
+# MiuiCamera(Lecia 5.0)
+git clone https://gitlab.com/ItzDFPlayer/vendor_xiaomi_miuicamera -b leica-5.0 vendor/xiaomi/miuicamera
+
+# Sepolicy fix for imsrcsd
+echo -e "${color}Switch back to legacy imsrcsd sepolicy${end}"
+rm -rf device/qcom/sepolicy_vndr/legacy-um/qva/vendor/bengal/ims/imsservice.te
+cp device/qcom/sepolicy_vndr/legacy-um/qva/vendor/bengal/legacy-ims/hal_rcsservice.te device/qcom/sepolicy_vndr/legacy-um/qva/vendor/bengal/ims/hal_rcsservice.te
+
+# Rename conflicting qti_kernel_headers in source
+sed -i 's/"qti_kernel_headers"/"qti_kernel_headers_old"/g' vendor/flare/build/soong/Android.bp

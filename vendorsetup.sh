@@ -14,7 +14,8 @@ git clone https://github.com/sayann70/vendor_xiaomi_spes -b 15 vendor/xiaomi/spe
 git clone https://github.com/muralivijay/kernel_xiaomi_sm6225 kernel/xiaomi/sm6225
 
 # Hardware/Xiaomi
-git clone https://github.com/spes-development/hardware_xiaomi hardware/xiaomi
+rm -fr hardware/xiaomi
+git clone -b 15.0 https://github.com/spes-development/hardware_xiaomi hardware/xiaomi
 
 # MiuiCamera(Lecia 5.0)
 git clone https://gitlab.com/ItzDFPlayer/vendor_xiaomi_miuicamera -b leica-5.0 vendor/xiaomi/miuicamera

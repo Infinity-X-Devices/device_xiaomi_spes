@@ -20,11 +20,8 @@ PRODUCT_DEVICE := spes
 PRODUCT_BRAND := Redmi
 PRODUCT_MODEL := Redmi Note 11
 PRODUCT_MANUFACTURER := Xiaomi
-
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
-
-# Boot animaton
-TARGET_BOOT_ANIMATION_RES := 1440
+TARGET_BOOT_ANIMATION_RES := 1080
 
 # Infinity-X Specific Flags
 INFINITY_BUILD_TYPE := OFFICIAL
@@ -32,17 +29,8 @@ INFINITY_MAINTAINER := JassiV
 WITH_GAPPS := true
 TARGET_BUILD_GOOGLE_TELEPHONY := true
 
-
-# Overlay
-DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-lineage
-
-# LiveDisplay
-PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay@2.0-service-sdm
-
 # Fingerprint
 BUILD_FINGERPRINT := "Redmi/spes/spes:13/TKQ1.221114.001/V14.0.5.0.TGCINXM:user/release-keys"
 
 PRODUCT_SYSTEM_NAME := spes_global
 PRODUCT_SYSTEM_DEVICE := spes
-
